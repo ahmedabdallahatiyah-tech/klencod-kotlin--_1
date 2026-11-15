@@ -1,0 +1,88 @@
+package com.baran.app // تأكد أن هذا هو اسم الحزمة الخاص بمشروعك
+
+import android.os.Bundle
+import android.text.InputType
+import android.view.Gravity
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
+import android.graphics.Color
+import android.graphics.Typeface
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // 1. إنشاء حاوية رئيسية قابلة للتمرير
+        val scrollView = ScrollView(this)
+        val mainLayout = LinearLayout(this)
+        mainLayout.orientation = LinearLayout.VERTICAL
+        mainLayout.setPadding(60, 60, 60, 60) // هوامش
+        scrollView.addView(mainLayout)
+
+        // 2. عنوان التطبيق
+        val titleText = TextView(this)
+        titleText.text = "تطبيق تسديد الديون"
+        titleText.textSize = 26f
+        titleText.setTypeface(null, Typeface.BOLD)
+        titleText.setTextColor(Color.parseColor("#1565C0")) // أزرق
+        titleText.gravity = Gravity.CENTER
+        titleText.setPadding(0, 0, 0, 50)
+        mainLayout.addView(titleText)
+
+        // 3. حقل إدخال اسم الشخص
+        val nameInput = EditText(this)
+        nameInput.hint = "اسم الشخص أو الجهة"
+        nameInput.textSize = 18f
+        nameInput.setPadding(0, 0, 0, 20)
+        mainLayout.addView(nameInput)
+
+        // 4. حقل إدخال المبلغ (أرقام فقط)
+        val amountInput = EditText(this)
+        amountInput.hint = "المبلغ الإجمالي"
+        amountInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        amountInput.textSize = 18f
+        amountInput.setPadding(0, 0, 0, 30)
+        mainLayout.addView(amountInput)
+
+        // 5. زر الحفظ
+        val addButton = Button(this)
+        addButton.text = "حفظ الدين"
+        addButton.textSize = 18f
+        addButton.setBackgroundColor(Color.parseColor("#1565C0"))
+        addButton.setTextColor(Color.WHITE)
+        mainLayout.addView(addButton)
+
+        // 6. منطقة عرض الرسائل (سنستخدمها لاحقاً لعرض الديون)
+        val resultText = TextView(this)
+        resultText.text = "\nلا توجد ديون مسجلة حتى الآن."
+        resultText.textSize = 18f
+        resultText.setPadding(0, 30, 0, 0)
+        mainLayout.addView(resultText)
+
+        // 7. ربط الواجهة بالتطبيق
+        setContentView(scrollView)
+
+        // 8. ماذا يحدث عند الضغط على زر الحفظ؟ (مؤقتاً سنظهر رسالة فقط)
+        addButton.setOnClickListener {
+            val name = nameInput.text.toString().trim()
+            val amount = amountInput.text.toString().trim()
+
+            if (name.isEmpty() || amount.isEmpty()) {
+                Toast.makeText(this, "الرجاء إدخال الاسم والمبلغ", Toast.LENGTH_SHORT).show()
+            } else {
+                // تفريغ الحقول
+                nameInput.text.clear()
+                amountInput.text.clear()
+                
+                // إظهار رسالة نجاح
+                Toast.makeText(this, "تم استلام البيانات! (سيتم الحفظ لاحقاً)", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
